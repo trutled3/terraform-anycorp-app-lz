@@ -26,6 +26,11 @@ data "tfe_organization" "this" {
   }
 }
 
+data "tfe_variable_set" "vault_varset" {
+  name = var.tfe_vault_varset_name
+  organization = data.tfe_organization.this.name
+}
+
 # TFE landing zone
 resource "tfe_project" "project" {
   name = "${var.app_name}-project"
@@ -36,12 +41,13 @@ resource "tfe_workspace" "workspace" {
   for_each = toset(var.environments)
 
   organization = data.tfe_organization.this.name
+  project_id = tfe_project.project.id
   name = "${var.app_name}-${each.key}-workspace"
 }
 
-resource "tfe_project_variable_set" "name" {
+resource "tfe_project_variable_set" "vault_varset" {
   project_id = tfe_project.project.id
-  variable_set_id = var.tfe_variable_set_vault_id
+  variable_set_id = data.tfe_variable_set.vault_varset.id
 }
 
 resource "tfe_variable" "tfe_vault_role" {

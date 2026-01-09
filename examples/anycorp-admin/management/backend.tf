@@ -2,11 +2,11 @@
 
 terraform {
   cloud {
-    organization = "<my admin org>" # replace this with your admin org
+    organization = "anycorp-graham-admin" # replace this with your admin org
 
     workspaces {
       project = "Default Project"
-      name    = "<my lz workspace>" # replace this with the workspace for this repo
+      name    = "terraform-anycorp-app-lz-graham" # replace this with the workspace for this repo
     }
   }
 }

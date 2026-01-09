@@ -12,16 +12,6 @@ data "tfe_organization" "this" {
   }
 }
 
-data "tfe_project" "admin_project" {
-  name = local.tfe_admin_project
-  organization = data.tfe_organization.this.name
-}
-
-data "tfe_variable_set" "vault" {
-  name = "Vault Varset - ${data.tfe_project.admin_project.name}"
-  organization = data.tfe_organization.this.name
-}
-
 module "anycorp-app-lz" {
   source  = "./../../.."
   # insert required variables here
@@ -30,6 +20,6 @@ module "anycorp-app-lz" {
   environments = var.environments
 
   # sensible defaults/static config
-  vault_jwt_auth_path = "jwt"
-  tfe_variable_set_vault_id = data.tfe_variable_set.vault.id
+  vault_jwt_auth_path = local.vault_jwt_auth_path
+  tfe_vault_varset_name = local.tfe_vault_varset_name
 }

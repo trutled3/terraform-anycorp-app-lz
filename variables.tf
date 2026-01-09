@@ -18,6 +18,6 @@ variable "vault_jwt_auth_path" {
   type = string
 }
 
-variable "tfe_variable_set_vault_id" {
+variable "tfe_vault_varset_name" {
   type = string
 }
