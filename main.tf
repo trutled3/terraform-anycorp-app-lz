@@ -95,7 +95,7 @@ resource "vault_jwt_auth_backend_role" "tfe_workspace_reader_role" {
 
   backend        = var.vault_jwt_auth_path
   role_name      = "${var.app_name}-tfe-${each.value.workspace_name}-reader-role"
-  token_policies = ["tfe-policy", vault_policy.secrets_reader.name]
+  token_policies = [vault_policy.aws_secret_auth.name]
 
   bound_audiences   = [local.tfe_vault_audience]
   bound_claims_type = "glob"
