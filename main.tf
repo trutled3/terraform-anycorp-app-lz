@@ -7,7 +7,7 @@ terraform {
       version = "0.71.0"
     }
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "5.6.0"
     }
   }
@@ -27,13 +27,13 @@ data "tfe_organization" "this" {
 }
 
 data "tfe_variable_set" "vault_varset" {
-  name = var.tfe_vault_varset_name
+  name         = var.tfe_vault_varset_name
   organization = data.tfe_organization.this.name
 }
 
 # TFE landing zone
 resource "tfe_project" "project" {
-  name = "${var.app_name}-project"
+  name         = "${var.app_name}-project"
   organization = data.tfe_organization.this.name
 }
 
@@ -41,12 +41,12 @@ resource "tfe_workspace" "workspace" {
   for_each = toset(var.environments)
 
   organization = data.tfe_organization.this.name
-  project_id = tfe_project.project.id
-  name = "${var.app_name}-${each.key}-workspace"
+  project_id   = tfe_project.project.id
+  name         = "${var.app_name}-${each.key}-workspace"
 }
 
 resource "tfe_project_variable_set" "vault_varset" {
-  project_id = tfe_project.project.id
+  project_id      = tfe_project.project.id
   variable_set_id = data.tfe_variable_set.vault_varset.id
 }
 
@@ -90,12 +90,12 @@ EOT
 # They just need to specify a role that TFE will use to ask Vault for Azure credentials. This is that role.
 #
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/jwt_auth_backend_role
-resource "vault_jwt_auth_backend_role" "tfc_workspace_reader_role" {
+resource "vault_jwt_auth_backend_role" "tfe_workspace_reader_role" {
   for_each = local.workspace_keys
 
   backend        = var.vault_jwt_auth_path
-  role_name      = "${var.app_name}-tfc-${each.value.workspace_name}-reader-role"
-  token_policies = ["tfc-policy", vault_policy.secrets_reader.name]
+  role_name      = "${var.app_name}-tfe-${each.value.workspace_name}-reader-role"
+  token_policies = ["tfe-policy", vault_policy.secrets_reader.name]
 
   bound_audiences   = [local.tfe_vault_audience]
   bound_claims_type = "glob"
