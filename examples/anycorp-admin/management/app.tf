@@ -13,13 +13,14 @@ data "tfe_organization" "this" {
 }
 
 module "anycorp-app-lz" {
-  source  = "./../../.."
+  source = "./../../.."
   # insert required variables here
 
-  app_name = var.app_name
+  app_name     = var.app_name
   environments = var.environments
 
   # sensible defaults/static config
-  vault_jwt_auth_path = local.vault_jwt_auth_path
+  vault_jwt_auth_path   = local.vault_jwt_auth_path
   tfe_vault_varset_name = local.tfe_vault_varset_name
+  aws_account_id        = var.aws_account_id
 }
