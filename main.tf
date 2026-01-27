@@ -47,7 +47,7 @@ resource "tfe_workspace" "workspace" {
 
 resource "tfe_project_variable_set" "vault_varset" {
   project_id      = tfe_project.project.id
-  variable_set_id = data.tfe_variable_set.vault_varset.id
+  variable_set_id = tfe_variable_set.vault_varset.id
 }
 
 resource "tfe_variable" "tfe_vault_role" {
