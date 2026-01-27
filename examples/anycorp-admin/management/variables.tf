@@ -13,3 +13,14 @@ variable "environments" {
   type    = list(string)
   default = ["dev", "prod"]
 }
+
+variable "vault_jwt_auth_path" {
+  type        = string
+  default     = "jwt"
+  description = "The path where the JWT auth method is enabled in Vault"
+}
+
+variable "tfe_vault_varset_name" {
+  type        = string
+  description = "The name of the TFE variable set that contains Vault backed dynamic credentials related variables."
+}
