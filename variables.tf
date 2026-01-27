@@ -30,3 +30,9 @@ variable "aws_account_id" {
   default     = ""
   description = "The AWS Account ID for the APM if using AWS. Leave blank if not using AWS."
 }
+
+variable "vault_namespace" {
+  type        = string
+  default     = "admin"
+  description = "The namespace of the Vault instance you'd like to create the AWS and jwt auth backends in"
+}

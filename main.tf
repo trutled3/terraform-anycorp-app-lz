@@ -26,7 +26,7 @@ data "tfe_organization" "this" {
   }
 }
 
-data "tfe_variable_set" "vault_varset" {
+resource "tfe_variable_set" "vault_varset" {
   name         = var.tfe_vault_varset_name
   organization = data.tfe_organization.this.name
 }
@@ -66,21 +66,21 @@ resource "tfe_variable" "tfe_vault_role" {
 # Vault landing zone
 
 # App Policies
-resource "vault_policy" "secrets_reader" {
-  name = "secrets-reader"
+# resource "vault_policy" "secrets_reader" {
+#   name = "secrets-reader"
 
-  policy = <<EOT
-# Configure the actual secrets the token should have access to
+#   policy = <<EOT
+# # Configure the actual secrets the token should have access to
 
-# Example Azure dynamic creds role
-# (NOTE) the Azure creds themselves have more access within Azure (e.g. the ability to create infra)
-# this is just the capabilities that the app has to interact with Vault. All it needs is to be able to read Azure dynamic credentials
-path "azure/creds/${var.app_name}" {
-  capabilities = ["read"]
-}
+# # Example Azure dynamic creds role
+# # (NOTE) the Azure creds themselves have more access within Azure (e.g. the ability to create infra)
+# # this is just the capabilities that the app has to interact with Vault. All it needs is to be able to read Azure dynamic credentials
+# path "azure/creds/${var.app_name}" {
+#   capabilities = ["read"]
+# }
 
-EOT
-}
+# EOT
+# }
 
 # Creates a role for the jwt auth backend and uses bound claims
 # to ensure that only the specified Terraform Cloud workspace will
