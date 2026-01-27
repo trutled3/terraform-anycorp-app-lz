@@ -1,6 +1,6 @@
 data "vault_auth_backend" "tfe_jwt" {
-  namespace = var.vault_namespace
-  path      = var.vault_jwt_auth_path
+  # namespace = var.vault_namespace
+  path = var.vault_jwt_auth_path
 }
 
 #####################################################################
