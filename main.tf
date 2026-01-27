@@ -27,7 +27,7 @@ data "tfe_organization" "this" {
 }
 
 resource "tfe_variable_set" "vault_varset" {
-  name         = var.tfe_vault_varset_name
+  name         = "${var.app_name}-vault-backed-credentials"
   organization = data.tfe_organization.this.name
 }
 

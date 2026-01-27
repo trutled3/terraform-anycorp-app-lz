@@ -20,7 +20,6 @@ module "anycorp-app-lz" {
   environments = var.environments
 
   # sensible defaults/static config
-  vault_jwt_auth_path   = var.vault_jwt_auth_path
-  tfe_vault_varset_name = var.tfe_vault_varset_name
-  aws_account_id        = var.aws_account_id
+  vault_jwt_auth_path = var.vault_jwt_auth_path
+  aws_account_id      = var.aws_account_id
 }
