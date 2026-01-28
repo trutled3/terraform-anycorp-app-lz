@@ -7,9 +7,4 @@ provider "aws" {}
 
 resource "aws_s3_bucket" "example" {
   bucket = "vault-backed-dynamic-creds-example-bucket-${var.TFC_WORKSPACE_NAME}"
-
-  tags = {
-    TFE_WORKSPACE = var.TFC_WORKSPACE_NAME
-    Environment   = "Dev"
-  }
 }
