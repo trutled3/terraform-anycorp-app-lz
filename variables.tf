@@ -22,7 +22,6 @@ variable "vault_jwt_auth_path" {
 
 variable "aws_account_id" {
   type        = string
-  default     = ""
   description = "The AWS Account ID for the APM if using AWS. Leave blank if not using AWS."
 }
 
