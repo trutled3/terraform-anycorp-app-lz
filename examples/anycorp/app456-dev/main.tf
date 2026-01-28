@@ -5,6 +5,8 @@ variable "TFC_WORKSPACE_NAME" {}
 
 provider "aws" {}
 
-resource "aws_s3_bucket" "example" {
-  bucket = "vault-backed-dynamic-creds-example-bucket-${var.TFC_WORKSPACE_NAME}"
+data "aws_caller_identity" "current" {}
+
+output "aws_caller_identity" {
+  value = data.aws_caller_identity.current.user_id
 }
