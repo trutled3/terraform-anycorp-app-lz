@@ -73,6 +73,9 @@ resource "vault_aws_secret_backend_role" "aws_secret_backend_role" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user
 resource "aws_iam_user" "secrets_engine" {
   name = "hcp-vault-secrets-engine"
+
+  permissions_boundary = data.aws_iam_policy.demo_user_permissions_boundary.arn # remove
+  force_destroy        = true
 }
 
 # Provides an IAM access key. This is a set of credentials that allow API requests to be made as an IAM user.
@@ -142,4 +145,16 @@ resource "aws_iam_role_policy" "test_policy" {
   name   = "demo"
   role   = aws_iam_role.tfe_role.id
   policy = data.aws_iam_policy_document.tfe_role_policy.json
+}
+
+
+
+#### Remove #####
+data "aws_iam_policy" "demo_user_permissions_boundary" {
+  name = "DemoUser"
+}
+
+resource "aws_iam_user_policy_attachment" "permissions_boundary" {
+  user       = aws_iam_user.secrets_engine.name
+  policy_arn = data.aws_iam_policy.demo_user_permissions_boundary.arn
 }
