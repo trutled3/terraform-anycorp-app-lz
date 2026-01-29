@@ -41,7 +41,7 @@ resource "tfe_project_variable_set" "vault_varset" {
   variable_set_id = tfe_variable_set.vault_varset.id
 }
 
-resource "tfe_variable" "enable_vault_backed_aws_auth" {
+resource "tfe_variable" "vault_backed_aws_mount_path" {
   variable_set_id = tfe_variable_set.vault_varset.id
 
   key      = "TFC_VAULT_BACKED_AWS_MOUNT_PATH"
@@ -51,24 +51,19 @@ resource "tfe_variable" "enable_vault_backed_aws_auth" {
   description = "The AWS secrets engine in Vault to target for credentials."
 }
 
-resource "tfe_variable" "enable_vault_backed_aws_auth" {
+resource "tfe_variable" "vault_backed_aws_run_vault_role" {
   variable_set_id = tfe_variable_set.vault_varset.id
 
   key      = "TFC_VAULT_BACKED_AWS_RUN_VAULT_ROLE"
-  value    = "true"
-  category = vault_aws_secret_backend_role.aws_secret_backend_role.name
+  value    = vault_aws_secret_backend_role.aws_secret_backend_role.name
+  category = "env"
 
   description = "The AWS secrets engine in Vault to target for credentials."
 }
+
 #----------------------------------------------------------------#
-
-
-
-# other vars
-
-
-
 # TFE landing zone
+#----------------------------------------------------------------#
 resource "tfe_project" "project" {
   name         = "${var.app_name}-project"
   organization = data.tfe_organization.this.name
@@ -81,8 +76,6 @@ resource "tfe_workspace" "workspace" {
   project_id   = tfe_project.project.id
   name         = "${var.app_name}-${each.key}-workspace"
 }
-
-
 
 resource "tfe_variable" "tfe_vault_role" {
   for_each = local.workspace_keys
