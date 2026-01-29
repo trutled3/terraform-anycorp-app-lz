@@ -26,10 +26,47 @@ data "tfe_organization" "this" {
   }
 }
 
+
+
+#----------------------------------------------------------------#
+# App Specific Variables for Vault Backed Dynamic Credentials
+#----------------------------------------------------------------#
 resource "tfe_variable_set" "vault_varset" {
   name         = "${var.app_name}-vault-backed-credentials"
   organization = data.tfe_organization.this.name
 }
+
+resource "tfe_project_variable_set" "vault_varset" {
+  project_id      = tfe_project.project.id
+  variable_set_id = tfe_variable_set.vault_varset.id
+}
+
+resource "tfe_variable" "enable_vault_backed_aws_auth" {
+  variable_set_id = tfe_variable_set.vault_varset.id
+
+  key      = "TFC_VAULT_BACKED_AWS_MOUNT_PATH"
+  value    = "true"
+  category = "env"
+
+  description = "The AWS secrets engine in Vault to target for credentials."
+}
+
+resource "tfe_variable" "enable_vault_backed_aws_auth" {
+  variable_set_id = tfe_variable_set.vault_varset.id
+
+  key      = "TFC_VAULT_BACKED_AWS_RUN_VAULT_ROLE"
+  value    = "true"
+  category = vault_aws_secret_backend_role.aws_secret_backend_role.name
+
+  description = "The AWS secrets engine in Vault to target for credentials."
+}
+#----------------------------------------------------------------#
+
+
+
+# other vars
+
+
 
 # TFE landing zone
 resource "tfe_project" "project" {
@@ -45,10 +82,7 @@ resource "tfe_workspace" "workspace" {
   name         = "${var.app_name}-${each.key}-workspace"
 }
 
-resource "tfe_project_variable_set" "vault_varset" {
-  project_id      = tfe_project.project.id
-  variable_set_id = tfe_variable_set.vault_varset.id
-}
+
 
 resource "tfe_variable" "tfe_vault_role" {
   for_each = local.workspace_keys
