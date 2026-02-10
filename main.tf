@@ -111,7 +111,7 @@ resource "vault_jwt_auth_backend_role" "tfe_workspace_reader_role" {
   for_each = local.workspace_keys
 
   backend        = var.vault_jwt_auth_path
-  role_name      = "tfe-${each.value.workspace_name}-reader-role"
+  role_name      = "tfe-lz-${each.value.workspace_name}-reader-role"
   token_policies = [vault_policy.aws_secret_auth[each.key].name]
 
   bound_audiences   = [local.tfe_vault_audience]

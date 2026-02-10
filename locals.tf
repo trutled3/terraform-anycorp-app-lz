@@ -6,7 +6,7 @@ locals {
     k => {
       workspace_name               = w.name
       workspace_id                 = w.id
-      workspace_vault_role_name    = "${w.name}-tfe-role"
+      workspace_vault_role_name    = "${w.name}-tfe-lz-role"
       workspace_vault_run_role_arn = "arn:aws:iam::${var.aws_account_id}:role/tfe-${w.name}-role"
     }
   }
