@@ -6,6 +6,7 @@ variable "TFC_WORKSPACE_NAME" {}
 variable "aws_region" {
   type        = string
   description = "The AWS region to manage resources in."
+  default     = "us-east-1"
 }
 
 provider "aws" {
