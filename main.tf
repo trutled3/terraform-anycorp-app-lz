@@ -47,9 +47,9 @@ resource "tfe_variable" "tfe_vault_role" {
 
   workspace_id = each.value.workspace_id
 
-  key      = "TFC_VAULT_RUN_ROLE"
-          vault_jwt_auth_backend_role.tfe_workspace_reader_role[each.key].role_name
-  value    = each.value.workspace_vault_role_name
+  key = "TFC_VAULT_RUN_ROLE"
+
+  value    = vault_jwt_auth_backend_role.tfe_workspace_reader_role[each.key].role_name
   category = "env"
 
   description = "The Vault role runs will use to authenticate."
@@ -73,7 +73,7 @@ resource "tfe_variable" "vault_backed_aws_run_vault_role" {
   workspace_id = each.value.workspace_id
 
   key      = "TFC_VAULT_BACKED_AWS_RUN_VAULT_ROLE"
-  value    = vault_jwt_auth_backend_role.tfe_workspace_reader_role[each.key].role_name
+  value    = each.value.workspace_vault_role_name
   category = "env"
 
   description = "The role under the AWS secrets engine in Vault to read credentials from."
