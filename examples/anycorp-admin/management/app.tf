@@ -22,4 +22,6 @@ module "anycorp-app-lz" {
   # sensible defaults/static config
   vault_jwt_auth_path = var.vault_jwt_auth_path
   aws_account_id      = var.aws_account_id
+
+  aws_iam_user_arn = aws_iam_user.secrets_engine.arn
 }
