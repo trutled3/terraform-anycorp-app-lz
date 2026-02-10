@@ -28,6 +28,14 @@ data "aws_iam_policy_document" "vault_secrets_engine_generate_credentials" {
     ]
     resources = [aws_iam_user.secrets_engine.arn]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    # for demo restrict any iam role in any account that ends with -tfe-role. the iam role will restrict whom it trusts.
+    resources = ["arn:aws:iam::*:role/*-tfe-role"]
+  }
 }
 
 resource "aws_iam_user_policy" "vault_secrets_engine_generate_credentials" {
