@@ -8,7 +8,6 @@ resource "aws_iam_user" "secrets_engine" {
   name = "hcp-vault-secrets-engine"
 
   permissions_boundary = data.aws_iam_policy.demo_user_permissions_boundary.arn # remove
-  force_destroy        = true
 }
 
 # Provides an IAM policy attached to a user. In this case, allowing the secrets_engine user rotate its own access key
