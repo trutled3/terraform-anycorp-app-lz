@@ -5,7 +5,7 @@ variable "app_name" {
 
 variable "aws_account_id" {
   type        = string
-  description = "The AWS Account ID for the APM if using AWS. Leave blank if not using AWS."
+  description = "The AWS Account ID for the App if using AWS. Leave blank if not using AWS."
 }
 
 variable "environments" {

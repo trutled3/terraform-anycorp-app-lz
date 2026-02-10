@@ -3,7 +3,14 @@
 # https://developer.hashicorp.com/terraform/cloud-docs/workspaces/run/run-environment#environment-variables
 variable "TFC_WORKSPACE_NAME" {}
 
-provider "aws" {}
+variable "aws_region" {
+  type        = string
+  description = "The AWS region to manage resources in."
+}
+
+provider "aws" {
+  region = var.aws_region
+}
 
 data "aws_caller_identity" "current" {}
 

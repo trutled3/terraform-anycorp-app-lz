@@ -26,41 +26,6 @@ data "tfe_organization" "this" {
   }
 }
 
-
-
-#----------------------------------------------------------------#
-# App Specific Variables for Vault Backed Dynamic Credentials
-#----------------------------------------------------------------#
-resource "tfe_variable_set" "vault_varset" {
-  name         = "${var.app_name}-vault-backed-credentials"
-  organization = data.tfe_organization.this.name
-}
-
-resource "tfe_project_variable_set" "vault_varset" {
-  project_id      = tfe_project.project.id
-  variable_set_id = tfe_variable_set.vault_varset.id
-}
-
-resource "tfe_variable" "vault_backed_aws_mount_path" {
-  variable_set_id = tfe_variable_set.vault_varset.id
-
-  key      = "TFC_VAULT_BACKED_AWS_MOUNT_PATH"
-  value    = "true"
-  category = "env"
-
-  description = "The AWS secrets engine in Vault to target for credentials."
-}
-
-resource "tfe_variable" "vault_backed_aws_run_vault_role" {
-  variable_set_id = tfe_variable_set.vault_varset.id
-
-  key      = "TFC_VAULT_BACKED_AWS_RUN_VAULT_ROLE"
-  value    = vault_aws_secret_backend_role.aws_secret_backend_role.name
-  category = "env"
-
-  description = "The AWS secrets engine in Vault to target for credentials."
-}
-
 #----------------------------------------------------------------#
 # TFE landing zone
 #----------------------------------------------------------------#
@@ -74,7 +39,7 @@ resource "tfe_workspace" "workspace" {
 
   organization = data.tfe_organization.this.name
   project_id   = tfe_project.project.id
-  name         = "${var.app_name}-${each.key}-workspace"
+  name         = "${var.app_name}-${each.key}"
 }
 
 resource "tfe_variable" "tfe_vault_role" {
@@ -87,6 +52,30 @@ resource "tfe_variable" "tfe_vault_role" {
   category = "env"
 
   description = "The Vault role runs will use to authenticate."
+}
+
+resource "tfe_variable" "tfc_vault_backed_aws_run_role_arn" {
+  for_each = local.workspace_keys
+
+  workspace_id = each.value.workspace_id
+
+  key      = "TFC_VAULT_BACKED_AWS_RUN_ROLE_ARN"
+  value    = each.value.workspace_vault_run_role_arn
+  category = "env"
+
+  description = "The AWS IAM Role ARN runs will assume."
+}
+
+resource "tfe_variable" "vault_backed_aws_run_vault_role" {
+  for_each = local.workspace_keys
+
+  workspace_id = each.value.workspace_id
+
+  key      = "TFC_VAULT_BACKED_AWS_RUN_VAULT_ROLE"
+  value    = vault_aws_secret_backend_role.aws_secret_backend_role[each.key].name
+  category = "env"
+
+  description = "The role under the AWS secrets engine in Vault to read credentials from."
 }
 
 
@@ -122,7 +111,7 @@ resource "vault_jwt_auth_backend_role" "tfe_workspace_reader_role" {
 
   backend        = var.vault_jwt_auth_path
   role_name      = "${var.app_name}-tfe-${each.value.workspace_name}-reader-role"
-  token_policies = [vault_policy.aws_secret_auth.name]
+  token_policies = [vault_policy.aws_secret_auth[each.key].name]
 
   bound_audiences   = [local.tfe_vault_audience]
   bound_claims_type = "glob"
