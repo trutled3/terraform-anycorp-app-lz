@@ -48,6 +48,7 @@ resource "tfe_variable" "tfe_vault_role" {
   workspace_id = each.value.workspace_id
 
   key      = "TFC_VAULT_RUN_ROLE"
+          vault_jwt_auth_backend_role.tfe_workspace_reader_role[each.key].role_name
   value    = each.value.workspace_vault_role_name
   category = "env"
 
@@ -110,7 +111,7 @@ resource "vault_jwt_auth_backend_role" "tfe_workspace_reader_role" {
   for_each = local.workspace_keys
 
   backend        = var.vault_jwt_auth_path
-  role_name      = "${var.app_name}-tfe-${each.value.workspace_name}-reader-role"
+  role_name      = "tfe-${each.value.workspace_name}-reader-role"
   token_policies = [vault_policy.aws_secret_auth[each.key].name]
 
   bound_audiences   = [local.tfe_vault_audience]
