@@ -23,5 +23,6 @@ module "anycorp-app-lz" {
   vault_jwt_auth_path = var.vault_jwt_auth_path
   aws_account_id      = var.aws_account_id
 
-  aws_iam_user_arn = aws_iam_user.secrets_engine.arn
+  aws_iam_user_arn        = aws_iam_user.secrets_engine.arn
+  aws_secret_backend_path = vault_aws_secret_backend.aws_secret_backend.path
 }

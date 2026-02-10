@@ -18,3 +18,9 @@ variable "vault_jwt_auth_path" {
   default     = "jwt"
   description = "The path where the JWT auth method is enabled in Vault"
 }
+
+variable "aws_secrets_backend_path" {
+  type        = string
+  default     = "aws"
+  description = "The mount path of the AWS secrets engine in Vault."
+}

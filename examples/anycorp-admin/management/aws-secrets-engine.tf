@@ -52,7 +52,7 @@ resource "aws_iam_access_key" "secrets_engine_credentials" {
 # https://registry.terraform.io/providers/hashicorp/vault/latest/docs/resources/aws_secret_backend
 resource "vault_aws_secret_backend" "aws_secret_backend" {
   #   namespace = var.vault_namespace
-  path = "aws"
+  path = var.aws_secrets_backend_path
 
   # WARNING - These values will be written in plaintext in the statefiles for this configuration. 
   # Protect the statefiles for this configuration accordingly!
