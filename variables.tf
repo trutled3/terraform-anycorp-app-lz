@@ -18,6 +18,15 @@ variable "environments" {
 }
 
 #---------------------------------------------------------------------------------#
+# TFE Variables
+#---------------------------------------------------------------------------------#
+variable "tfe_vault_varset_name" {
+  type        = string
+  description = "The name of the TFE variable set that faciliates Vault backed dynamic credentials."
+  default     = "vault-backed-dynamic-credentials"
+}
+
+#---------------------------------------------------------------------------------#
 # AWS Variables
 #---------------------------------------------------------------------------------#
 variable "aws_account_id" {

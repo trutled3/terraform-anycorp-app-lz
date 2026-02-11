@@ -29,9 +29,19 @@ data "tfe_organization" "this" {
 #----------------------------------------------------------------#
 # TFE landing zone
 #----------------------------------------------------------------#
+data "tfe_variable_set" "test" {
+  name         = var.tfe_vault_varset_name
+  organization = data.tfe_organization.this.name
+}
+
 resource "tfe_project" "project" {
   name         = "${var.app_name}-project"
   organization = data.tfe_organization.this.name
+}
+
+resource "tfe_project_variable_set" "test" {
+  variable_set_id = data.tfe_variable_set.test.id
+  project_id      = tfe_project.project.id
 }
 
 resource "tfe_workspace" "workspace" {
